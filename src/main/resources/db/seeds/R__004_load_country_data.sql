@@ -4,8 +4,6 @@
 -- IDs TSID gerados para 2026-07-25 (Node 4)
 -- ============================================
 
-TRUNCATE TABLE country RESTART IDENTITY CASCADE;
-
 INSERT INTO country (
     id,
     code,

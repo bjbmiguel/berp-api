@@ -12,26 +12,36 @@ import javax.sql.DataSource;
 @Slf4j
 public class FlywayConfig {
 
+    private static final String DEV_PROFILE = "dev";
+    private static final String MIGRATION_LOCATION = "classpath:db/migration";
+    private static final String SEED_LOCATION = "classpath:db/seeds";
+    private static final String TEST_DATA_LOCATION = "classpath:db/testdata";
+
     @Value("${spring.profiles.active}")
     private String activeProfile;
 
     @Bean(initMethod = "migrate")
     public Flyway flyway(DataSource dataSource) {
-        Flyway flyway = Flyway.configure()
+
+        String[] locations = isDevelopmentProfile()
+                ? new String[]{
+                MIGRATION_LOCATION,
+                SEED_LOCATION,
+                TEST_DATA_LOCATION
+        }
+                : new String[]{
+                MIGRATION_LOCATION,
+                SEED_LOCATION
+        };
+
+        return Flyway.configure()
                 .dataSource(dataSource)
-                .locations("classpath:db/migration")
+                .locations(locations)
                 .baselineOnMigrate(true)
                 .load();
+    }
 
-        if ("dev".equals(activeProfile)) {
-            log.warn("Running flyway in dev environment...");
-            flyway = Flyway.configure()
-                    .dataSource(dataSource)
-                    .locations("classpath:db/migration", "classpath:db/testdata")
-                    .baselineOnMigrate(true)
-                    .load();
-        }
-
-        return flyway;
+    private boolean isDevelopmentProfile() {
+        return DEV_PROFILE.equalsIgnoreCase(activeProfile);
     }
 }

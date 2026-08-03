@@ -18,7 +18,10 @@ public enum TableNode {
     USERS(2, "users", "System users"),
     PERSON(3, "person", "Individuals"),
     COUNTRY(4, "country", "Countries"),
-    ACCESS_ROLE(5, "access_role", "Access profiles");
+    ACCESS_ROLE(5, "access_role", "Access profiles"),
+    PROVINCE(6, "province", "Province"),
+    MUNICIPALITY(7, "municipality", "Municipalities"),
+    COMMUNE(8, "commune", "Communes");
 
 
     private final int nodeId;
